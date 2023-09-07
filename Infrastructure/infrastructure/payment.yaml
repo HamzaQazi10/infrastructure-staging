@@ -1,0 +1,42 @@
+#-----------POD CREATED
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-deployment
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-app
+  template:
+    metadata:
+      labels:
+        app: payment-app
+    spec:
+     # nodeSelector:
+      #  kubernetes.io/hostname: cluster1-m03
+      containers:
+      - name: payment-container
+        image: hamzaarshad10/paymentservice:latest
+        ports:
+        - containerPort: 50051
+        env:
+          - name: PORT
+            value: "50051"
+          - name: SERVICE_NAME
+            value: payment  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+  namespace: staging
+spec:
+  selector:
+    app: payment-app
+  ports:
+    - protocol: TCP
+      port: 50051
+      targetPort: 50051
+  #type: NodePort 

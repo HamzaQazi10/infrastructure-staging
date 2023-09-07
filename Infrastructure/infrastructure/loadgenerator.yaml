@@ -1,0 +1,40 @@
+#-----------imagebackoff
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loadgenerator-deployment
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loadgenerator-app
+  template:
+    metadata:
+      labels:
+        app: loadgenerator-app
+    spec:
+     # nodeSelector:
+      #  kubernetes.io/hostname: cluster1-m03
+      containers:
+      - name: loadgenerator-container
+        image: hamzaarshad10/loadgenerator:latest
+        ports:
+        - containerPort: 8089
+        env:
+          - name: FRONTEND_ADDR
+            value: "http//frontend"  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadgenerator
+  namespace: staging
+spec:
+  selector:
+    app: loadgenerator-app
+  ports:
+    - protocol: TCP
+      port: 8089
+      targetPort: 8089
+  #type: NodePort 

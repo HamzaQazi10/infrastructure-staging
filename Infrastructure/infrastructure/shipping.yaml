@@ -1,0 +1,43 @@
+#-----------POD CREATED
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping-deployment
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shipping-app
+  template:
+    metadata:
+      labels:
+        app: shipping-app
+    spec:
+     # nodeSelector:
+      #  kubernetes.io/hostname: cluster1-m03
+      containers:
+      - name: shipping-container
+        image: hamzaarshad10/shippingservice:latest
+        ports:
+        - containerPort: 50051
+        env:
+          - name: PORT
+            value: "50051"
+          - name: SERVICE_NAME
+            value: shipping 
+  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping
+  namespace: staging
+spec:
+  selector:
+    app: shipping-app
+  ports:
+    - protocol: TCP
+      port: 50051
+      targetPort: 50051
+  #type: NodePort 

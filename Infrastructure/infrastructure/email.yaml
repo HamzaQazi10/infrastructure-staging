@@ -1,0 +1,42 @@
+#-----------POD CREATED
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-deployment
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email-app
+  template:
+    metadata:
+      labels:
+        app: email-app
+    spec:
+     # nodeSelector:
+      #  kubernetes.io/hostname: cluster1-m03
+      containers:
+      - name: email-container
+        image: hamzaarshad10/emailservice:latest
+        ports:
+        - containerPort: 8080
+        env:
+          #- name: PRODUCT_CATALOG_SERVICE_ADDR
+           # value: productcatalog  
+          - name: SERVICE_NAME
+            value: email
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: email
+spec:
+  selector:
+    app: email-app
+    namespace: staging
+  ports:
+    - protocol: TCP
+      port: 8080 #IN DOCKERILE IT IS 8080 BUT ITS IS CONFLICTING WITH RECOMMENDATION AND FRONTEND
+      targetPort: 8080
+  #type: NodePort 

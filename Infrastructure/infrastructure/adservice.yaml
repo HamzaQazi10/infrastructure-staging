@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ad-deployment
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ad-app
+  template:
+    metadata:
+      labels:
+        app: ad-app
+    spec:
+     # nodeSelector:
+      #  kubernetes.io/hostname: cluster1-m03
+      containers:
+      - name: react-app-container
+        image: hamzaarshad10/adservice:latest
+        ports:
+        - containerPort: 9555 
+        env:
+          - name: PORT
+            value: "9555"
+          - name: SERVICE_NAME
+            value: adservice 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adservice
+  namespace: staging
+spec:
+  selector:
+    app: ad-app
+  ports:
+    - protocol: TCP
+      port: 9555  
+      targetPort: 9555  
+  #type: NodePort 

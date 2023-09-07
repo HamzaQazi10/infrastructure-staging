@@ -1,0 +1,52 @@
+#-----------imagebackoff
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-deployment
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: checkout-app
+  template:
+    metadata:
+      labels:
+        app: checkout-app
+    spec:
+     # nodeSelector:
+      #  kubernetes.io/hostname: cluster1-m03
+      containers:
+      - name: checkout-app-container
+        image: hamzaarshad10/checkoutservice:latest
+        ports:
+        - containerPort: 5050
+        env:
+          - name: PORT
+            value: "5050"
+          - name: PRODUCT_CATALOG_SERVICE_ADDR
+            value: "productcatalog:3550"
+          - name: SHIPPING_SERVICE_ADDR
+            value: "shipping:50051"
+          - name: CART_SERVICE_ADDR
+            value: "cart:7070" #TO be MODIDIED
+          - name: CURRENCY_SERVICE_ADDR
+            value: "currency:7000"
+          - name: EMAIL_SERVICE_ADDR
+            value: "email:8080" #PORT TO be MODIDIED
+          - name: PAYMENT_SERVICE_ADDR
+            value: "payment:50051"  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: checkout
+  namespace: staging
+spec:
+  selector:
+    app: checkout-app
+  ports:
+    - protocol: TCP
+      port: 5050
+      targetPort: 5050
+  #type: NodePort 

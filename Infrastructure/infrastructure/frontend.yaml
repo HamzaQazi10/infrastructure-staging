@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app-container
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+     # nodeSelector:
+      #  kubernetes.io/hostname: cluster1-m03
+      containers:
+      - name: frontend-app-container
+        image: hamzaarshad10/frontendproject:latest
+        ports:
+        - containerPort: 8080  
+        env:
+          - name: PORT
+            value: "8080"
+          - name: PRODUCT_CATALOG_SERVICE_ADDR
+            value: "productcatalog:3550"
+          - name: CURRENCY_SERVICE_ADDR
+            value: "currency:7000"
+          - name: CART_SERVICE_ADDR
+            value: "cart:7070"
+          - name: RECOMMENDATION_SERVICE_ADDR
+            value: "recommendation:9090"
+          - name: CHECKOUT_SERVICE_ADDR
+            value: "checkout:5050"
+          - name: SHIPPING_SERVICE_ADDR
+            value: "shipping:50051"
+          - name: AD_SERVICE_ADDR
+            value: "adservice:9555"
+          - name: ENV_PLATFORM
+            value: "onprem"
+            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: staging
+spec:
+  selector:
+    app: frontend-app
+  ports:
+    - protocol: TCP
+      port: 8080  
+      targetPort: 8080  
+  type: LoadBalancer 

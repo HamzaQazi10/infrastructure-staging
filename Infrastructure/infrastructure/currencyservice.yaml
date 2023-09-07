@@ -1,0 +1,42 @@
+#-----------Pod running but not accessing through nodeport
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: currency-app-deployment
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: currency-app
+  template:
+    metadata:
+      labels:
+        app: currency-app
+    spec:
+     # nodeSelector:
+      #  kubernetes.io/hostname: cluster1-m03
+      containers:
+      - name: currency-app-container
+        image: hamzaarshad10/currencyservice:latest
+        ports:
+        - containerPort: 7000 
+        env:
+          - name: PORT
+            value: "7000" 
+          - name: SERVICE_NAME
+            value: currency
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: currency
+  namespace: staging
+spec:
+  selector:
+    app: currency-app
+  ports:
+    - protocol: TCP
+      port: 7000
+      targetPort: 7000 
+  #type: NodePort 
