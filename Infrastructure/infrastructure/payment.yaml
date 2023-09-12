@@ -25,7 +25,14 @@ spec:
           - name: PORT
             value: "50051"
           - name: SERVICE_NAME
-            value: payment  
+            value: payment 
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 200Mi
 ---
 apiVersion: v1
 kind: Service

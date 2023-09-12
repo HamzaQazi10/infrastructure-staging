@@ -39,7 +39,13 @@ spec:
             value: "adservice:9555"
           - name: ENV_PLATFORM
             value: "onprem"
-            
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 200Mi            
 ---
 apiVersion: v1
 kind: Service

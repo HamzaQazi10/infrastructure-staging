@@ -26,7 +26,13 @@ spec:
             value: "50051"
           - name: SERVICE_NAME
             value: shipping 
-  
+        resources:
+          requests:
+            cpu: 100m
+            memory: 220Mi
+          limits:
+            cpu: 200m
+            memory: 450Mi
 ---
 apiVersion: v1
 kind: Service

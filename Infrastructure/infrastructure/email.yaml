@@ -26,6 +26,13 @@ spec:
            # value: productcatalog  
           - name: SERVICE_NAME
             value: email
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 200Mi
 ---
 apiVersion: v1
 kind: Service

@@ -16,7 +16,7 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /tmp/hostpath_pv
-  persistentVolumeReclaimPolicy: delete
+  persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
 ---
 apiVersion: v1
