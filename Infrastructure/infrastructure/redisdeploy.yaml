@@ -31,9 +31,9 @@ spec:
         volumeMounts:
         - name: redis-data
           mountPath: /data
-        #env:  
-        #- name: REDIS_PASSWORD
-         # value: "your-redis-password"
+        env:  
+        - name: REDIS_PASSWORD
+          value: "your-redis-password"
       volumes:
       - name: redis-data
         persistentVolumeClaim:
