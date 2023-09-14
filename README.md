@@ -130,7 +130,12 @@ helm install ngrok-ingress-controller ngrok/kubernetes-ingress-controller \
 kubectl  get pods,domains,httpsedges,tunnels -n ngrok-ingress-controller
 
 ```
+3. Cleanup process
+```bash 
+helm -n ngrok-ingress-controller list
+helm uninstall -n ngrok-ingress-controller ngrok-ingress-controller
 
+```
 
 ## Deliverables
 Acceptance criteria for the task are as follows: 
